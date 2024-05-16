@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -18,8 +19,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return Inertia::render('Users',[
-            'users' => $users
+        return Inertia::render('Users/index', [
+            'users' => $users,
         ]);
     }
 
@@ -28,15 +29,23 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'string|required',
+            'password' => 'string|required|min:8',
+            'email' => 'email|required',
+            'is_admin' => 'required',
+        ]);
+        $isAdmin = $request->input('is_admin') === 'admin' ? 1 : 0;
+        User::create($request->only('name', 'email', 'password') + ['is_admin' => $isAdmin]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function edit(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        return response()->json($user, 200);
     }
 
     /**
@@ -44,7 +53,13 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $request->validate([
+            'name' => 'string|required',
+            'email' => 'email|required',
+        ]);
+        $isAdmin = $request->input('is_admin') === 'admin' ? 1 : 0;
+        $user->update($request->only('name', 'email') + ['is_admin' => $isAdmin]);
     }
 
     /**
@@ -52,6 +67,6 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id)->delete();
     }
 }

@@ -17,7 +17,11 @@ class TransactionFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => 2,
+            'description' => fake()->name(),
+            'amount' => rand(100, 200),
+            'type' => 'expence',
+            'category' => fake()->name(),
         ];
     }
 }

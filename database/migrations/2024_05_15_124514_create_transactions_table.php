@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('amount');
             $table->enum('type',['income','expence','transfer']);
-            $table->string('category');
+            $table->string('category')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
