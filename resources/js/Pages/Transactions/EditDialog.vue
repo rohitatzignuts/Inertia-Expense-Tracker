@@ -17,6 +17,7 @@ const props = defineProps({
             description: "",
             category: "",
             amount: "",
+            created_at: "",
         }),
     },
 });
@@ -29,6 +30,12 @@ let editForm = ref({
     category: props.transaction.category,
     amount: props.transaction.amount,
 });
+
+const dateFormatter = (date) => {
+    let newDate = new Date(date);
+    let formattedDate = newDate.toLocaleDateString();
+    return formattedDate;
+};
 
 const handletransactionEdit = () => {
     try {
@@ -97,6 +104,10 @@ watch(
                         >
                             <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                 <p class="font-bold">Edit transaction</p>
+                                <small>{{
+                                    dateFormatter(transaction.created_at)
+                                }}</small>
+
                                 <hr class="my-4" />
                                 <div>
                                     <form action="">

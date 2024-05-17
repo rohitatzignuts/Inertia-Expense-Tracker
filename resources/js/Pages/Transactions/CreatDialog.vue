@@ -74,7 +74,7 @@ const handleFormSubmission = () => {
                             class="relative transform overflow-hidden rounded-lg bg-0white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
                         >
                             <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                                <p class="font-bold">Create User</p>
+                                <p class="font-bold">Add Transactoion</p>
                                 <hr class="my-4" />
                                 <div>
                                     <form
@@ -97,6 +97,7 @@ const handleFormSubmission = () => {
                                                 v-model="createForm.description"
                                                 type="text"
                                                 name="description"
+                                                maxlength="20"
                                                 id="description"
                                                 placeholder="Description ..."
                                                 required
@@ -108,6 +109,7 @@ const handleFormSubmission = () => {
                                                 v-model="createForm.category"
                                                 type="text"
                                                 name="category"
+                                                maxlength="20"
                                                 id="category"
                                                 placeholder="Category ..."
                                                 class="border-b-2 border-t-0 bo border-x-0 rounded"

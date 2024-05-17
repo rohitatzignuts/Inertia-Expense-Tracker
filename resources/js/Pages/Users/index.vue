@@ -45,7 +45,7 @@ const closeEditDialog = () => {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 absolute w-full">
                 <div class="text-right mb-4">
                     <button
-                        class="bg-indigo-500 p-2 rounded text-white"
+                        class="bg-indigo-500 p-2 rounded text-white font-bold"
                         @click="isCreateDialogOpen = true"
                     >
                         CREATE

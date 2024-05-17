@@ -2,9 +2,10 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import CreatDialog from "./CreatDialog.vue";
-import { ref } from "vue";
+import { ref, computed, watch } from "vue";
 import Pagination from "@/Shared/Pagination.vue";
 import EditDialog from "./EditDialog.vue";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps({
     transactions: Object,
@@ -12,6 +13,49 @@ const props = defineProps({
 const isDialogOpen = ref(false);
 const isCreateDialogOpen = ref(false);
 const editTransaction = ref();
+const transactionMonth = ref("");
+
+const totalIncome = computed(() => {
+    if (props.transactions && props.transactions.data) {
+        return props.transactions.data.reduce((accumulator, currentValue) => {
+            if (currentValue.type === "income") {
+                return accumulator + currentValue.amount;
+            }
+            return accumulator;
+        }, 0);
+    }
+    return 0;
+});
+
+const totalExpense = computed(() => {
+    if (props.transactions && props.transactions.data) {
+        return props.transactions.data.reduce((accumulator, currentValue) => {
+            if (
+                currentValue.type === "expence" ||
+                currentValue.type === "transfer"
+            ) {
+                return accumulator + currentValue.amount;
+            }
+            return accumulator;
+        }, 0);
+    }
+    return 0;
+});
+
+const handleFilterbyDate = () => {
+    console.log(transactionMonth.value);
+    try {
+        router.visit("/transactions", {
+            method: "get",
+
+            data: {
+                month: transactionMonth.value,
+            },
+        });
+    } catch (error) {}
+};
+
+const totalBalance = ref(totalIncome.value - totalExpense.value);
 
 const openEditDialog = async (id) => {
     isDialogOpen.value = true;
@@ -37,10 +81,20 @@ const openEditDialog = async (id) => {
         </template>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 absolute w-full">
-                <div class="text-right mb-4">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 w-full">
+                <div class="flex justify-between mb-4">
+                    <div>
+                        <input
+                            v-model="transactionMonth"
+                            type="month"
+                            name="date"
+                            id="date"
+                            class="rounded border-indigo-500 border-l-8 bg-gray-800 text-gray-200"
+                            @change.prevent="handleFilterbyDate"
+                        />
+                    </div>
                     <button
-                        class="bg-indigo-500 p-2 rounded text-white"
+                        class="bg-indigo-500 p-2 rounded text-white font-bold"
                         @click="isCreateDialogOpen = true"
                     >
                         CREATE
@@ -51,15 +105,27 @@ const openEditDialog = async (id) => {
                 >
                     <div>
                         <p>Income</p>
-                        <strong class="text-2xl">52</strong>
+                        <strong class="text-2xl text-green-500">{{
+                            totalIncome
+                        }}</strong>
                     </div>
                     <div>
                         <p>Expenses</p>
-                        <strong class="text-2xl">10</strong>
+                        <strong class="text-2xl text-red-500">{{
+                            totalExpense
+                        }}</strong>
                     </div>
                     <div>
                         <p>Balance</p>
-                        <strong class="text-2xl">42</strong>
+                        <strong
+                            class="text-2xl"
+                            :class="
+                                totalBalance < 0
+                                    ? 'text-red-500'
+                                    : 'text-green-500'
+                            "
+                            >{{ totalBalance }}</strong
+                        >
                     </div>
                 </div>
                 <div

@@ -24,8 +24,11 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'user',
-            'email' => 'usermin@example.com',
+            'email' => 'user@example.com',
             'password' => '00000000'
+        ]);
+        $this->call([
+            TransactionSeeder::class
         ]);
     }
 }

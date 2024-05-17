@@ -12,9 +12,10 @@ use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::orderBy('id', 'desc')->paginate(5);
+        $selectedMonth = $request->input('month') ? date('m', strtotime($request->input('month'))) : date('m');
+        $transactions = Transaction::orderBy('id', 'desc')->whereMonth('created_at', '=', $selectedMonth)->paginate(5)->withQueryString();
         return Inertia::render('Transactions/index', [
             'transactions' => $transactions,
         ]);

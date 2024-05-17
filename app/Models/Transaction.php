@@ -10,4 +10,9 @@ class Transaction extends Model
 {
     use HasFactory;
     public $guarded = [];
+
+    public function getTimeAttribute(): string
+    {
+        return date('d M Y, H:i:s', strtotime($this->attributes['created_at']));
+    }
 }
