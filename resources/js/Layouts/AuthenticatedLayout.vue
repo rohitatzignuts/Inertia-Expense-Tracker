@@ -44,6 +44,7 @@ const showingNavigationDropdown = ref(false);
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
                                 <NavLink
+                                    v-if="!$page.props.auth.user.is_admin"
                                     :href="route('transactions')"
                                     :active="route().current('transactions')"
                                 >
@@ -165,6 +166,7 @@ const showingNavigationDropdown = ref(false);
                             Dashboard
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
+                            v-if="!$page.props.auth.user.is_admin"
                             :href="route('transactions')"
                             :active="route().current('transactions')"
                         >

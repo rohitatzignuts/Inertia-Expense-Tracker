@@ -33,8 +33,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // users routes
+    // users routes getUsernames
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/all', [UserController::class, 'getUsernames'])->name('users.all');
     Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}/update', [UserController::class, 'update'])->name('users.update');
@@ -46,6 +47,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions/{transaction}/edit', [TransactionController::class, 'edit'])->name('transactions.edit');
     Route::put('/transactions/{transaction}/update', [TransactionController::class, 'update'])->name('transactions.update');
     Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+
+    Route::get('{user}/transactions', [TransactionController::class, 'userTransactions'])->name('user.transactions');
+
 });
 
 require __DIR__ . '/auth.php';

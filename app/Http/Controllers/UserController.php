@@ -69,4 +69,13 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id)->delete();
     }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function getUsernames()
+    {
+        $user = User::where('is_admin','!=','1')->get();
+        return $user;
+    }
 }

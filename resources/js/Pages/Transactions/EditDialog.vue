@@ -39,7 +39,7 @@ const dateFormatter = (date) => {
 
 const handletransactionEdit = () => {
     try {
-        router.visit(`transactions/${props.transaction.id}/update`, {
+        router.visit(`/transactions/${props.transaction.id}/update`, {
             method: "put",
             data: editForm,
         });
@@ -51,7 +51,7 @@ const handletransactionEdit = () => {
 
 const handletransactionDelete = () => {
     try {
-        router.visit(`transactions/${props.transaction.id}`, {
+        router.visit(`/transactions/${props.transaction.id}`, {
             method: "delete",
         });
         emits("handleDialogClose");

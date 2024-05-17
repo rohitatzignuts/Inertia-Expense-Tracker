@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 
 const props = defineProps({
     loggedUsers: Array,
@@ -34,7 +34,9 @@ const props = defineProps({
                         </div>
                         <hr class="opacity-15 my-4" />
                         <ul v-for="user in loggedUsers" :key="user.id">
-                            <li class="text-xl pb-2">~ {{ user.name }}</li>
+                            <Link :href="`${user.id}/transactions`">
+                                <li class="text-xl pb-2">~ {{ user.name }}</li>
+                            </Link>
                         </ul>
                     </div>
                     <div v-else class="text-white p-4">you are logged in!!</div>
