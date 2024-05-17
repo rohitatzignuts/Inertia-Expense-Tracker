@@ -9,6 +9,8 @@ import { router } from "@inertiajs/vue3";
 
 const props = defineProps({
     transactions: Object,
+    totalIncome: Number | String,
+    totalExpence: Number | String,
     userTransactions: Object,
 });
 
@@ -17,32 +19,8 @@ const isCreateDialogOpen = ref(false);
 const editTransaction = ref();
 const transactionMonth = ref("");
 
-const totalIncome = computed(() => {
-    if (props.transactions && props.transactions.data) {
-        return props.transactions.data.reduce((accumulator, currentValue) => {
-            if (currentValue.type === "income") {
-                return accumulator + currentValue.amount;
-            }
-            return accumulator;
-        }, 0);
-    }
-    return 0;
-});
-
-const totalExpense = computed(() => {
-    if (props.transactions && props.transactions.data) {
-        return props.transactions.data.reduce((accumulator, currentValue) => {
-            if (
-                currentValue.type === "expence" ||
-                currentValue.type === "transfer"
-            ) {
-                return accumulator + currentValue.amount;
-            }
-            return accumulator;
-        }, 0);
-    }
-    return 0;
-});
+const totalIncome = props.totalIncome;
+const totalExpense = props.totalExpence;
 
 const handleFilterbyDate = () => {
     console.log(transactionMonth.value);
@@ -57,7 +35,7 @@ const handleFilterbyDate = () => {
     } catch (error) {}
 };
 
-const totalBalance = ref(totalIncome.value - totalExpense.value);
+const totalBalance = ref(totalIncome - totalExpense);
 
 const openEditDialog = async (id) => {
     isDialogOpen.value = true;
@@ -178,6 +156,11 @@ const openEditDialog = async (id) => {
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 cursor-pointer"
+                                        :class="
+                                            transaction.type === 'income'
+                                                ? 'text-green-500 '
+                                                : 'text-red-500'
+                                        "
                                         tabindex="-1"
                                         @click="openEditDialog(transaction.id)"
                                     >

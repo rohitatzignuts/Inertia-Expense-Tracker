@@ -16,35 +16,38 @@ class TransactionController extends Controller
     public function index(Request $request)
     {
         $selectedMonth = $request->input('month') ? date('m', strtotime($request->input('month'))) : date('m');
+        $totalIncome = Transaction::where('type', 'income')
+            ->where('user_id', Auth::user()->id)
+            ->sum('amount');
+        $totalExpence = Transaction::where('type', 'expence')
+            ->where('user_id', Auth::user()->id)
+            ->sum('amount');
         $transactions = Transaction::orderBy('id', 'desc')
             ->where('user_id', Auth::user()->id)
             ->whereMonth('created_at', '=', $selectedMonth)
             ->paginate(5)
             ->withQueryString();
+
         return Inertia::render('Transactions/index', [
             'transactions' => $transactions,
+            'totalIncome' => $totalIncome,
+            'totalExpence' => $totalExpence,
         ]);
     }
 
     public function userTransactions($id, Request $request)
     {
-
-        // Check if a user ID is provided via the request and fetch the user or use the provided ID
         $selectedUser = $request->input('user') ? User::findOrFail($request->input('user')) : null;
-
-        // Determine the user to use
         $user = $selectedUser ? $selectedUser : User::findOrFail($id);
-
-        // Determine the selected month, defaulting to the current month if not provided
         $selectedMonth = $request->input('month') ? date('m', strtotime($request->input('month'))) : date('m');
-
-        // Get the user's transactions for the selected month and paginate the results
         $userTransactions = $user->transactions()->whereMonth('created_at', '=', $selectedMonth)->paginate(5)->withQueryString();
-
-        // Render the view with the transactions and user name
+        $totalIncome = $user->transactions()->where('type', 'income')->sum('amount');
+        $totalExpence = $user->transactions()->where('type', 'expence')->sum('amount');
         return Inertia::render('Transactions/UserTransactions', [
             'userTransactions' => $userTransactions,
             'userName' => $user->name,
+            'totalIncome' => $totalIncome,
+            'totalExpence' => $totalExpence,
         ]);
     }
 

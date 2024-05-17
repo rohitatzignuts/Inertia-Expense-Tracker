@@ -9,6 +9,8 @@ import axios from "axios";
 
 const props = defineProps({
     userTransactions: Object,
+    totalIncome: Number | String,
+    totalExpence: Number | String,
     userName: String,
 });
 
@@ -25,38 +27,8 @@ const selectedID = computed(() => {
     return user ? user.id : null;
 });
 
-const totalIncome = computed(() => {
-    if (props.userTransactions && props.userTransactions.data) {
-        return props.userTransactions.data.reduce(
-            (accumulator, currentValue) => {
-                if (currentValue.type === "income") {
-                    return accumulator + currentValue.amount;
-                }
-                return accumulator;
-            },
-            0
-        );
-    }
-    return 0;
-});
-
-const totalExpense = computed(() => {
-    if (props.userTransactions && props.userTransactions.data) {
-        return props.userTransactions.data.reduce(
-            (accumulator, currentValue) => {
-                if (
-                    currentValue.type === "expence" ||
-                    currentValue.type === "transfer"
-                ) {
-                    return accumulator + currentValue.amount;
-                }
-                return accumulator;
-            },
-            0
-        );
-    }
-    return 0;
-});
+const totalIncome = props.totalIncome;
+const totalExpense = props.totalExpence;
 
 const getAllUsers = async () => {
     const res = await axios.get("/users/all");
@@ -74,7 +46,7 @@ const handleFilters = () => {
     } catch (error) {}
 };
 
-const totalBalance = computed(() => totalIncome.value - totalExpense.value);
+const totalBalance = computed(() => totalIncome - totalExpense);
 
 const openEditDialog = async (id) => {
     isDialogOpen.value = true;
