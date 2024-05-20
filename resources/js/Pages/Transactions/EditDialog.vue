@@ -24,7 +24,6 @@ const props = defineProps({
 
 const emits = defineEmits(["handleDialogClose"]);
 
-// store selected transaction data into editForm ref
 let editForm = ref({
     type: props.transaction.type,
     description: props.transaction.description,
@@ -32,41 +31,35 @@ let editForm = ref({
     amount: props.transaction.amount,
 });
 
-// format transaction date
 const dateFormatter = (date) => {
     let newDate = new Date(date);
     let formattedDate = newDate.toLocaleDateString();
     return formattedDate;
 };
 
-// edit transaction data
 const handletransactionEdit = () => {
     try {
         router.visit(`/transactions/${props.transaction.id}/update`, {
             method: "put",
             data: editForm,
         });
-        // close edit dialog
         emits("handleDialogClose");
     } catch (error) {
         console.log(error);
     }
 };
 
-// delete transaction
 const handletransactionDelete = () => {
     try {
         router.visit(`/transactions/${props.transaction.id}`, {
             method: "delete",
         });
-        // close delete dialog
         emits("handleDialogClose");
     } catch (error) {
         console.log(error);
     }
 };
 
-// update edit form data when transaction changes
 watch(
     () => props.transaction,
     (newtransaction) => {
@@ -77,7 +70,6 @@ watch(
 </script>
 
 <template>
-    <!-- edit transaction dialog  -->
     <TransitionRoot as="template" :show="isDialogOpen">
         <Dialog class="relative z-10" @close="emits('handleDialogClose')">
             <TransitionChild
@@ -107,7 +99,6 @@ watch(
                         leave-from="opacity-100 translate-y-0 sm:scale-100"
                         leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <!-- edit transaction dialog content  -->
                         <DialogPanel
                             class="relative transform overflow-hidden rounded-lg bg-0white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
                         >
@@ -118,10 +109,8 @@ watch(
                                 }}</small>
 
                                 <hr class="my-4" />
-                                <!-- edit transaction form  -->
                                 <div>
                                     <form action="">
-                                        <!-- transaction amount input  -->
                                         <div class="flex flex-col mb-4">
                                             <input
                                                 v-model="transaction.amount"
@@ -133,7 +122,6 @@ watch(
                                                 class="border-b-2 border-t-0 bo border-x-0 rounded"
                                             />
                                         </div>
-                                        <!-- transaction amount description  -->
                                         <div class="flex flex-col mb-4">
                                             <input
                                                 v-model="
@@ -147,7 +135,6 @@ watch(
                                                 class="border-b-2 border-t-0 bo border-x-0 rounded"
                                             />
                                         </div>
-                                        <!-- transaction amount category  -->
                                         <div class="flex flex-col mb-4">
                                             <input
                                                 v-model="transaction.category"
@@ -159,7 +146,6 @@ watch(
                                                 class="border-b-2 border-t-0 bo border-x-0 rounded"
                                             />
                                         </div>
-                                        <!-- transaction amount type  -->
                                         <div class="flex flex-col mb-4">
                                             <select
                                                 v-model="transaction.type"
@@ -178,11 +164,9 @@ watch(
                                                 </option>
                                             </select>
                                         </div>
-                                        <!-- transaction action buttons -->
                                         <div
                                             class="flex gap-2 justify-end p-2 rounded"
                                         >
-                                            <!-- transaction edit button -->
                                             <button
                                                 type="button"
                                                 class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-200 sm:mt-0 sm:w-auto"
@@ -190,7 +174,6 @@ watch(
                                             >
                                                 EDIT
                                             </button>
-                                            <!-- transaction delete button -->
                                             <button
                                                 type="button"
                                                 class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-200 sm:mt-0 sm:w-auto border-red-500"
@@ -198,7 +181,6 @@ watch(
                                             >
                                                 DELETE
                                             </button>
-                                            <!-- dialog close button -->
                                             <button
                                                 type="button"
                                                 class="mt-3 inline-flex w-full justify-center rounded-md bg-red-400 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
