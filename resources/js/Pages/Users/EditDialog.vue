@@ -23,35 +23,42 @@ const props = defineProps({
 
 const emits = defineEmits(["handleDialogClose"]);
 const isAdmin = ref();
+
+// store user data intp editForm ref
 let editForm = ref({
     name: props.user.name,
     email: props.user.email,
     is_admin: props.user.is_admin ? "admin" : "user",
 });
 
+// edit user data
 const handleUserEdit = () => {
     try {
         router.visit(`users/${props.user.id}/update`, {
             method: "put",
             data: editForm,
         });
+        // close the Dialog
         emits("handleDialogClose");
     } catch (error) {
         console.log(error);
     }
 };
 
+// delete user
 const handleUserDelete = () => {
     try {
         router.visit(`users/${props.user.id}`, {
             method: "delete",
         });
+        // close the Dialog
         emits("handleDialogClose");
     } catch (error) {
         console.log(error);
     }
 };
 
+// update user data whenever another user is clicked
 watch(
     () => props.user,
     (newUser) => {
@@ -62,6 +69,7 @@ watch(
 </script>
 
 <template>
+    <!-- edit user dialog  -->
     <TransitionRoot as="template" :show="isDialogOpen">
         <Dialog class="relative z-10" @close="emits('handleDialogClose')">
             <TransitionChild
@@ -77,7 +85,7 @@ watch(
                     class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
                 />
             </TransitionChild>
-
+            <!-- edit user dialog content  -->
             <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
                 <div
                     class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
@@ -94,11 +102,13 @@ watch(
                         <DialogPanel
                             class="relative transform overflow-hidden rounded-lg bg-0white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
                         >
+                            <!-- edit user dialog form  -->
                             <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                 <p class="font-bold">Edit User</p>
                                 <hr class="my-4" />
                                 <div>
                                     <form action="">
+                                        <!-- user name input  -->
                                         <div class="flex flex-col mb-4">
                                             <input
                                                 v-model="user.name"
@@ -110,6 +120,7 @@ watch(
                                                 class="border-b-2 border-t-0 bo border-x-0 rounded"
                                             />
                                         </div>
+                                        <!-- user email input  -->
                                         <div class="flex flex-col mb-4">
                                             <input
                                                 v-model="user.email"
@@ -121,6 +132,7 @@ watch(
                                                 class="border-b-2 border-t-0 bo border-x-0 rounded"
                                             />
                                         </div>
+                                        <!-- user type input  -->
                                         <div class="flex flex-col mb-4">
                                             <select
                                                 v-model="user.is_admin"
@@ -136,9 +148,11 @@ watch(
                                                 </option>
                                             </select>
                                         </div>
+                                        <!-- user form actions  -->
                                         <div
                                             class="flex gap-2 justify-end p-2 rounded"
                                         >
+                                            <!-- user form edit button -->
                                             <button
                                                 type="button"
                                                 class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-200 sm:mt-0 sm:w-auto"
@@ -146,6 +160,7 @@ watch(
                                             >
                                                 EDIT
                                             </button>
+                                            <!-- user form delete button -->
                                             <button
                                                 type="button"
                                                 class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-200 sm:mt-0 sm:w-auto border-red-500"
@@ -153,6 +168,7 @@ watch(
                                             >
                                                 DELETE
                                             </button>
+                                            <!-- user form cancle button -->
                                             <button
                                                 type="button"
                                                 class="mt-3 inline-flex w-full justify-center rounded-md bg-red-400 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"

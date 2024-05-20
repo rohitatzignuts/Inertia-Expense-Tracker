@@ -14,6 +14,7 @@ const isDialogOpen = ref(false);
 const isCreateDialogOpen = ref(false);
 const editUser = ref();
 
+// fill user edit form with user data
 const openEditDialog = async (id) => {
     isDialogOpen.value = true;
     try {
@@ -22,10 +23,6 @@ const openEditDialog = async (id) => {
     } catch (error) {
         console.log(error);
     }
-};
-
-const closeEditDialog = () => {
-    isDialogOpen.value = false;
 };
 </script>
 
@@ -40,7 +37,7 @@ const closeEditDialog = () => {
                 Users
             </h2>
         </template>
-
+        <!-- main content  -->
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 w-full">
                 <div class="text-right mb-4">
@@ -54,8 +51,10 @@ const closeEditDialog = () => {
                 <div
                     class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"
                 >
+                    <!-- user's listing  -->
                     <div class="text-white rounded-md shadow overflow-x-auto">
                         <table class="w-full whitespace-nowrap">
+                            <!-- users table headers  -->
                             <tr class="text-left font-bold">
                                 <th class="pb-4 pt-6 px-6">Name</th>
                                 <th class="pb-4 pt-6 px-6">Email</th>
@@ -66,6 +65,7 @@ const closeEditDialog = () => {
                                 :key="user.id"
                                 class="hover:bg-gray-100 hover:text-black focus-within:bg-gray-100 focus-within:text-black"
                             >
+                                <!-- user name  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 focus:text-indigo-500 cursor-pointer"
@@ -74,6 +74,7 @@ const closeEditDialog = () => {
                                         {{ user.name }}
                                     </div>
                                 </td>
+                                <!-- user email  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 cursor-pointer"
@@ -83,6 +84,7 @@ const closeEditDialog = () => {
                                         {{ user.email }}
                                     </div>
                                 </td>
+                                <!-- user type  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 cursor-pointer"
@@ -93,6 +95,7 @@ const closeEditDialog = () => {
                                     </div>
                                 </td>
                             </tr>
+                            <!-- No users found. message  -->
                             <tr v-if="users.length === 0">
                                 <td
                                     class="px-6 py-4 border-t border-gray-500"
@@ -106,11 +109,13 @@ const closeEditDialog = () => {
                 </div>
             </div>
         </div>
+        <!-- edit user dialog  -->
         <EditDialog
             :is-dialog-open="isDialogOpen"
             :user="editUser"
-            @handle-dialog-close="closeEditDialog"
+            @handle-dialog-close="isDialogOpen = false"
         />
+        <!-- create user dialog  -->
         <CreatDialog
             :isDialogOpen="isCreateDialogOpen"
             @handle-dialog-close="isCreateDialogOpen = false"

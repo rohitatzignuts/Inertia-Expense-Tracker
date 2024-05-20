@@ -16,6 +16,7 @@ class Transaction extends Model
     {
         return date('d M Y, H:i:s', strtotime($this->attributes['created_at']));
     }
+
     /**
      * Get the user that owns the Transaction
      *
@@ -23,6 +24,6 @@ class Transaction extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

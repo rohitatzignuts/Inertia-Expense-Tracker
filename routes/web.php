@@ -33,23 +33,26 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // users routes getUsernames
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/users/all', [UserController::class, 'getUsernames'])->name('users.all');
-    Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
-    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/users/{user}/update', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    // users routes
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.index');
+        Route::get('/all', [UserController::class, 'getUsernames'])->name('users.all');
+        Route::post('/store', [UserController::class, 'store'])->name('users.store');
+        Route::get('/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/{user}/update', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    });
 
     // transactions routes
-    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
-    Route::post('/transactions/store', [TransactionController::class, 'store'])->name('transactions.store');
-    Route::get('/transactions/{transaction}/edit', [TransactionController::class, 'edit'])->name('transactions.edit');
-    Route::put('/transactions/{transaction}/update', [TransactionController::class, 'update'])->name('transactions.update');
-    Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+    Route::prefix('transactions')->group(function () {
+        Route::get('/', [TransactionController::class, 'index'])->name('transactions');
+        Route::post('/store', [TransactionController::class, 'store'])->name('transactions.store');
+        Route::get('/{transaction}/edit', [TransactionController::class, 'edit'])->name('transactions.edit');
+        Route::put('/{transaction}/update', [TransactionController::class, 'update'])->name('transactions.update');
+        Route::delete('/{transaction}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+    });
 
     Route::get('{user}/transactions', [TransactionController::class, 'userTransactions'])->name('user.transactions');
-
 });
 
 require __DIR__ . '/auth.php';

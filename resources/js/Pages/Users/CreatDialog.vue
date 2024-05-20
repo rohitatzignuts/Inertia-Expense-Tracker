@@ -14,6 +14,7 @@ const props = defineProps({
 
 const emits = defineEmits(["handleDialogClose"]);
 
+// user form data
 const createForm = useForm({
     name: null,
     password: null,
@@ -21,6 +22,7 @@ const createForm = useForm({
     is_admin: null,
 });
 
+// create a new user
 const handleUserCreate = () => {
     try {
         router.visit("users/store", {
@@ -34,6 +36,7 @@ const handleUserCreate = () => {
 </script>
 
 <template>
+    <!-- create user dialog  -->
     <TransitionRoot as="template" :show="isDialogOpen">
         <Dialog class="relative z-10" @close="emits('handleDialogClose')">
             <TransitionChild
@@ -63,6 +66,7 @@ const handleUserCreate = () => {
                         leave-from="opacity-100 translate-y-0 sm:scale-100"
                         leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
+                        <!-- create user dialog content  -->
                         <DialogPanel
                             class="relative transform overflow-hidden rounded-lg bg-0white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
                         >
@@ -70,10 +74,12 @@ const handleUserCreate = () => {
                                 <p class="font-bold">Create User</p>
                                 <hr class="my-4" />
                                 <div>
+                                    <!-- create user form  -->
                                     <form
                                         action=""
                                         @submit.prevent="handleUserCreate"
                                     >
+                                        <!-- user name input  -->
                                         <div class="flex flex-col mb-4">
                                             <input
                                                 v-model="createForm.name"
@@ -85,6 +91,7 @@ const handleUserCreate = () => {
                                                 required
                                             />
                                         </div>
+                                        <!-- user password input  -->
                                         <div class="flex flex-col mb-4">
                                             <input
                                                 v-model="createForm.password"
@@ -96,6 +103,7 @@ const handleUserCreate = () => {
                                                 class="border-b-2 border-t-0 bo border-x-0 rounded"
                                             />
                                         </div>
+                                        <!-- user email input  -->
                                         <div class="flex flex-col mb-4">
                                             <input
                                                 v-model="createForm.email"
@@ -107,6 +115,7 @@ const handleUserCreate = () => {
                                                 class="border-b-2 border-t-0 bo border-x-0 rounded"
                                             />
                                         </div>
+                                        <!-- user type input  -->
                                         <div class="flex flex-col mb-4">
                                             <select
                                                 v-model="createForm.is_admin"
@@ -130,9 +139,11 @@ const handleUserCreate = () => {
                                                 </option>
                                             </select>
                                         </div>
+                                        <!-- user form actions -->
                                         <div
                                             class="flex gap-2 justify-end p-2 rounded"
                                         >
+                                            <!-- create user dialog close button  -->
                                             <button
                                                 type="button"
                                                 class="mt-3 inline-flex w-full justify-center rounded-md bg-red-400 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
@@ -143,6 +154,7 @@ const handleUserCreate = () => {
                                             >
                                                 CLOSE
                                             </button>
+                                            <!-- user form submit button -->
                                             <button
                                                 type="submit"
                                                 class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"

@@ -20,6 +20,7 @@ const editTransaction = ref();
 const transactionMonth = ref("");
 const usersArray = ref([]);
 const selectedUser = ref("");
+// dymically get the user id
 const selectedID = computed(() => {
     const user = usersArray.value.find(
         (user) => user.email === selectedUser.value
@@ -29,12 +30,15 @@ const selectedID = computed(() => {
 
 const totalIncome = props.totalIncome;
 const totalExpense = props.totalExpence;
+const totalBalance = computed(() => totalIncome - totalExpense);
 
+// get all the users for the select filter
 const getAllUsers = async () => {
     const res = await axios.get("/users/all");
     usersArray.value = res.data;
 };
 
+// get user transactions by the month
 const handleFilters = () => {
     try {
         router.visit(`/${selectedID.value}/transactions`, {
@@ -48,8 +52,7 @@ const handleFilters = () => {
     }
 };
 
-const totalBalance = computed(() => totalIncome - totalExpense);
-
+// fill edit form inputs with selected transaction's data
 const openEditDialog = async (id) => {
     isDialogOpen.value = true;
     try {
@@ -76,10 +79,11 @@ onMounted(() => {
                 userTransactions
             </h2>
         </template>
-
+        <!-- main content  -->
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 w-full">
                 <div class="flex justify-between mb-4">
+                    <!-- month filter  -->
                     <div>
                         <input
                             v-model="transactionMonth"
@@ -90,14 +94,7 @@ onMounted(() => {
                             @change="handleFilters"
                         />
                     </div>
-                    <button
-                        v-if="!$page.props.auth.user.is_admin"
-                        class="bg-indigo-500 p-2 rounded text-white font-bold"
-                        @click="isCreateDialogOpen = true"
-                    >
-                        CREATE
-                    </button>
-                    <div v-else>
+                    <div>
                         <select
                             v-model="selectedUser"
                             name="user"
@@ -112,6 +109,7 @@ onMounted(() => {
                         </select>
                     </div>
                 </div>
+                <!-- transaction statistics  -->
                 <div
                     class="flex justify-between p-4 rounded dark:bg-gray-800 text-gray-50 mb-4"
                 >
@@ -142,11 +140,14 @@ onMounted(() => {
                         ><sup class="ml-2">₹</sup>
                     </div>
                 </div>
+                <!-- transactions list by user  -->
                 <div
                     class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"
                 >
                     <div class="text-white rounded-md shadow overflow-x-auto">
+                        <!-- transactions table  -->
                         <table class="w-full whitespace-nowrap">
+                            <!-- transactions table headers -->
                             <tr class="text-left font-bold">
                                 <th class="pb-4 pt-6 px-6">BY</th>
                                 <th class="pb-4 pt-6 px-6">Description</th>
@@ -159,6 +160,7 @@ onMounted(() => {
                                 :key="transaction.id"
                                 class="hover:bg-gray-100 hover:text-black focus-within:bg-gray-100 focus-within:text-black"
                             >
+                                <!-- transactiond done by  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 focus:text-indigo-500 cursor-pointer"
@@ -167,6 +169,7 @@ onMounted(() => {
                                         {{ userName }}
                                     </div>
                                 </td>
+                                <!-- transactiond description  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 cursor-pointer"
@@ -176,6 +179,7 @@ onMounted(() => {
                                         {{ transaction.description }}
                                     </div>
                                 </td>
+                                <!-- transactiond amount  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 cursor-pointer"
@@ -185,6 +189,7 @@ onMounted(() => {
                                         {{ transaction.amount }} ₹
                                     </div>
                                 </td>
+                                <!-- transactiond type  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 cursor-pointer"
@@ -199,6 +204,7 @@ onMounted(() => {
                                         {{ transaction.type }}
                                     </div>
                                 </td>
+                                <!-- transactiond category  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 cursor-pointer"
@@ -209,6 +215,7 @@ onMounted(() => {
                                     </div>
                                 </td>
                             </tr>
+                            <!--  No userTransactions found. message  -->
                             <tr v-if="userTransactions.data.length === 0">
                                 <td
                                     class="px-6 py-4 border-t border-gray-500"

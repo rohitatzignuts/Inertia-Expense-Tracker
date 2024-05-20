@@ -14,7 +14,13 @@ use Inertia\Response;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the users
+     * @method GET
+     * @author Rohit Vispute (Zignuts Technolab)
+     * @route /users
+     * @authentication : Requires user authentication
+     * @middleware auth:sanctum
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -25,7 +31,14 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created user in storage.
+     * @method POST
+     * @author Rohit Vispute (Zignuts Technolab)
+     * @route /users/store
+     * @authentication : Requires user authentication
+     * @middleware auth:sanctum
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -35,12 +48,20 @@ class UserController extends Controller
             'email' => 'email|required',
             'is_admin' => 'required',
         ]);
+        // add user type
         $isAdmin = $request->input('is_admin') === 'admin' ? 1 : 0;
         User::create($request->only('name', 'email', 'password') + ['is_admin' => $isAdmin]);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified user data for editing.
+     * @method GET
+     * @author Rohit Vispute (Zignuts Technolab)
+     * @route /users/{user}/edit
+     * @authentication : Requires user authentication
+     * @middleware auth:sanctum
+     * @param \Illuminate\Http\Request $request,userId $id
+     * @return \Illuminate\Http\Response
      */
     public function edit(string $id)
     {
@@ -49,7 +70,14 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the selected user
+     * @method PUT
+     * @author Rohit Vispute (Zignuts Technolab)
+     * @route /users/{user}/update
+     * @authentication : Requires user authentication
+     * @middleware auth:sanctum
+     * @param \Illuminate\Http\Request $request,userId $id
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, string $id)
     {
@@ -58,12 +86,20 @@ class UserController extends Controller
             'name' => 'string|required',
             'email' => 'email|required',
         ]);
+        // update user type
         $isAdmin = $request->input('is_admin') === 'admin' ? 1 : 0;
         $user->update($request->only('name', 'email') + ['is_admin' => $isAdmin]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified user from storage.
+     * @method DELETE
+     * @author Rohit Vispute (Zignuts Technolab)
+     * @route /users/{user}
+     * @authentication : Requires user authentication
+     * @middleware auth:sanctum
+     * @param \Illuminate\Http\Request $request,userId $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy(string $id)
     {
@@ -71,11 +107,17 @@ class UserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Get all the users from the database ecxept admins
+     * @method GET
+     * @author Rohit Vispute (Zignuts Technolab)
+     * @route /users/all
+     * @authentication : Requires user authentication
+     * @middleware auth:sanctum
+     * @return \Illuminate\Http\Response
      */
     public function getUsernames()
     {
-        $user = User::where('is_admin','!=','1')->get();
+        $user = User::where('is_admin', '!=', '1')->get();
         return $user;
     }
 }

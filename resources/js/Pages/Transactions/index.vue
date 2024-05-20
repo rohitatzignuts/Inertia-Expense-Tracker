@@ -21,21 +21,23 @@ const transactionMonth = ref("");
 
 const totalIncome = props.totalIncome;
 const totalExpense = props.totalExpence;
+const totalBalance = ref(totalIncome - totalExpense);
 
+// filter transactions by month
 const handleFilterbyDate = () => {
     try {
         router.visit(`/transactions`, {
             method: "get",
-
             data: {
                 month: transactionMonth.value,
             },
         });
-    } catch (error) {}
+    } catch (error) {
+        console.log(error);
+    }
 };
 
-const totalBalance = ref(totalIncome - totalExpense);
-
+// fill the input feilds with the data of clicked transaction
 const openEditDialog = async (id) => {
     isDialogOpen.value = true;
     try {
@@ -59,9 +61,11 @@ const openEditDialog = async (id) => {
             </h2>
         </template>
 
+        <!-- main content  -->
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 w-full">
                 <div class="flex justify-between mb-4">
+                    <!-- select month filter  -->
                     <div>
                         <input
                             v-model="transactionMonth"
@@ -72,6 +76,7 @@ const openEditDialog = async (id) => {
                             @change.prevent="handleFilterbyDate"
                         />
                     </div>
+                    <!-- create transaction button  -->
                     <button
                         class="bg-indigo-500 p-2 rounded text-white font-bold"
                         @click="isCreateDialogOpen = true"
@@ -79,6 +84,7 @@ const openEditDialog = async (id) => {
                         CREATE
                     </button>
                 </div>
+                <!-- transaction statistics  -->
                 <div
                     class="flex justify-between p-4 rounded dark:bg-gray-800 text-gray-50 mb-4"
                 >
@@ -109,11 +115,14 @@ const openEditDialog = async (id) => {
                         ><sup class="ml-2">₹</sup>
                     </div>
                 </div>
+                <!-- transactions list  -->
                 <div
                     class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"
                 >
                     <div class="text-white rounded-md shadow overflow-x-auto">
+                        <!-- transactions table  -->
                         <table class="w-full whitespace-nowrap">
+                            <!-- transactions table headers -->
                             <tr class="text-left font-bold">
                                 <th class="pb-4 pt-6 px-6">BY</th>
                                 <th class="pb-4 pt-6 px-6">Description</th>
@@ -126,6 +135,7 @@ const openEditDialog = async (id) => {
                                 :key="transaction.id"
                                 class="hover:bg-gray-100 hover:text-black focus-within:bg-gray-100 focus-within:text-black"
                             >
+                                <!-- transaction done by  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 focus:text-indigo-500 cursor-pointer"
@@ -134,6 +144,7 @@ const openEditDialog = async (id) => {
                                         {{ $page.props.auth.user.name }}
                                     </div>
                                 </td>
+                                <!-- transaction description  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 cursor-pointer"
@@ -143,6 +154,7 @@ const openEditDialog = async (id) => {
                                         {{ transaction.description }}
                                     </div>
                                 </td>
+                                <!-- transaction amount  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 cursor-pointer"
@@ -152,6 +164,7 @@ const openEditDialog = async (id) => {
                                         {{ transaction.amount }} ₹
                                     </div>
                                 </td>
+                                <!-- transaction type  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 cursor-pointer"
@@ -166,6 +179,7 @@ const openEditDialog = async (id) => {
                                         {{ transaction.type }}
                                     </div>
                                 </td>
+                                <!-- transaction category  -->
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 cursor-pointer"
@@ -176,6 +190,7 @@ const openEditDialog = async (id) => {
                                     </div>
                                 </td>
                             </tr>
+                            <!-- No transactions found message  -->
                             <tr v-if="transactions.data.length === 0">
                                 <td
                                     class="px-6 py-4 border-t border-gray-500"
@@ -187,13 +202,16 @@ const openEditDialog = async (id) => {
                         </table>
                     </div>
                 </div>
+                <!-- pagination  -->
                 <pagination class="mt-6" :links="transactions.links" />
             </div>
         </div>
+        <!-- create transaction dialog  -->
         <CreatDialog
             :isDialogOpen="isCreateDialogOpen"
             @handle-dialog-close="isCreateDialogOpen = false"
         />
+        <!-- edit transaction dialog  -->
         <EditDialog
             :is-dialog-open="isDialogOpen"
             :transaction="editTransaction"

@@ -16,9 +16,10 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["handleDialogClose"]);
-const page = usePage();
 const userID = computed(() => page.props.auth.user.id);
+const page = usePage();
 
+// transaction create form
 const createForm = useForm({
     user_id: userID.value,
     description: null,
@@ -27,6 +28,7 @@ const createForm = useForm({
     category: null,
 });
 
+// send transaction form data to the store route
 const handleFormSubmission = () => {
     try {
         router.visit("transactions/store", {
@@ -41,6 +43,7 @@ const handleFormSubmission = () => {
 </script>
 
 <template>
+    <!-- create tansaction dialog  -->
     <TransitionRoot as="template" :show="isDialogOpen">
         <Dialog class="relative z-10" @close="emits('handleDialogClose')">
             <TransitionChild
@@ -70,17 +73,20 @@ const handleFormSubmission = () => {
                         leave-from="opacity-100 translate-y-0 sm:scale-100"
                         leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
+                        <!-- create tansaction dialog content-->
                         <DialogPanel
                             class="relative transform overflow-hidden rounded-lg bg-0white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
                         >
                             <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                 <p class="font-bold">Add Transactoion</p>
                                 <hr class="my-4" />
+                                <!-- create tansaction dialog form-->
                                 <div>
                                     <form
                                         action=""
                                         @submit.prevent="handleFormSubmission"
                                     >
+                                        <!-- transaction amount input  -->
                                         <div class="flex flex-col mb-4">
                                             <input
                                                 v-model="createForm.amount"
@@ -92,6 +98,7 @@ const handleFormSubmission = () => {
                                                 required
                                             />
                                         </div>
+                                        <!-- transaction description input  -->
                                         <div class="flex flex-col mb-4">
                                             <input
                                                 v-model="createForm.description"
@@ -104,6 +111,7 @@ const handleFormSubmission = () => {
                                                 class="border-b-2 border-t-0 bo border-x-0 rounded"
                                             />
                                         </div>
+                                        <!-- transaction category input  -->
                                         <div class="flex flex-col mb-4">
                                             <input
                                                 v-model="createForm.category"
@@ -115,6 +123,7 @@ const handleFormSubmission = () => {
                                                 class="border-b-2 border-t-0 bo border-x-0 rounded"
                                             />
                                         </div>
+                                        <!-- transaction type input  -->
                                         <div class="flex flex-col mb-4">
                                             <select
                                                 v-model="createForm.type"
@@ -141,9 +150,11 @@ const handleFormSubmission = () => {
                                                 </option>
                                             </select>
                                         </div>
+                                        <!-- transaction actions buttons -->
                                         <div
                                             class="flex gap-2 justify-end p-2 rounded"
                                         >
+                                            <!-- dialog close button -->
                                             <button
                                                 type="button"
                                                 class="mt-3 inline-flex w-full justify-center rounded-md bg-red-400 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
@@ -154,6 +165,7 @@ const handleFormSubmission = () => {
                                             >
                                                 CLOSE
                                             </button>
+                                            <!-- transaction create button -->
                                             <button
                                                 type="submit"
                                                 class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"

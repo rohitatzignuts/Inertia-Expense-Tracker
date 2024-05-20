@@ -19,12 +19,13 @@ const props = defineProps({
                 Dashboard
             </h2>
         </template>
-
+        <!-- main content  -->
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div
                     class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"
                 >
+                    <!-- show list of users to admins  -->
                     <div
                         v-if="currentUser.is_admin === 1"
                         class="p-6 text-gray-900 dark:text-gray-100"
@@ -39,6 +40,7 @@ const props = defineProps({
                             </Link>
                         </ul>
                     </div>
+                    <!-- show message for normal users  -->
                     <div v-else class="text-white p-4">you are logged in!!</div>
                 </div>
             </div>

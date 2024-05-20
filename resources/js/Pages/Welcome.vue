@@ -43,6 +43,7 @@ function handleImageError() {
                 <p class="text-xl text-gray-300">
                     manage all of your expenses at one place
                 </p>
+                <!-- direct user to dashboard if he's logged in  -->
                 <div v-if="$page.props.auth.user" class="my-8">
                     <Link href="/dashboard">
                         <p
@@ -52,6 +53,7 @@ function handleImageError() {
                         </p>
                     </Link>
                 </div>
+                <!-- direct user to login or register if he's not logged in  -->
                 <div v-else class="my-8">
                     <Link href="/login">
                         <p
