@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watchEffect } from "vue";
 import Pagination from "@/Shared/Pagination.vue";
 import EditDialog from "./EditDialog.vue";
 import { router } from "@inertiajs/vue3";
@@ -43,7 +43,9 @@ const handleFilters = () => {
                 month: transactionMonth.value ?? null,
             },
         });
-    } catch (error) {}
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 const totalBalance = computed(() => totalIncome - totalExpense);
@@ -186,6 +188,11 @@ onMounted(() => {
                                 <td class="border-t border-gray-500">
                                     <div
                                         class="flex items-center px-6 py-4 cursor-pointer"
+                                        :class="
+                                            transaction.type === 'income'
+                                                ? 'text-green-500'
+                                                : 'text-red-500'
+                                        "
                                         tabindex="-1"
                                         @click="openEditDialog(transaction.id)"
                                     >

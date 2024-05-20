@@ -5,15 +5,14 @@ import {
     TransitionChild,
     TransitionRoot,
 } from "@headlessui/vue";
-import { ref, watch } from "vue";
 import { useForm } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps({
     isDialogOpen: Boolean,
 });
 
 const emits = defineEmits(["handleDialogClose"]);
-const isAdmin = ref("user");
 
 const createForm = useForm({
     name: null,
@@ -21,6 +20,17 @@ const createForm = useForm({
     email: null,
     is_admin: null,
 });
+
+const handleUserCreate = () => {
+    try {
+        router.visit("users/store", {
+            method: "post",
+            data: createForm,
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
 </script>
 
 <template>
@@ -62,9 +72,7 @@ const createForm = useForm({
                                 <div>
                                     <form
                                         action=""
-                                        @submit.prevent="
-                                            createForm.post('users/store')
-                                        "
+                                        @submit.prevent="handleUserCreate"
                                     >
                                         <div class="flex flex-col mb-4">
                                             <input

@@ -2,7 +2,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import CreatDialog from "./CreatDialog.vue";
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import Pagination from "@/Shared/Pagination.vue";
 import EditDialog from "./EditDialog.vue";
 import { router } from "@inertiajs/vue3";
@@ -23,7 +23,6 @@ const totalIncome = props.totalIncome;
 const totalExpense = props.totalExpence;
 
 const handleFilterbyDate = () => {
-    console.log(transactionMonth.value);
     try {
         router.visit(`/transactions`, {
             method: "get",
